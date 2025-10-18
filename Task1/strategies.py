@@ -10,7 +10,7 @@ from .search import a_star_search
 
 def puzzle_heuristic(state: PuzzleState, problem: PuzzleProblem) -> int:
     # Reuse existing h2; ignore problem parameter for compatibility.
-    return Heuristics.h2(state)
+    return Heuristics.misplaced_div2(state)
 
 
 def solve_puzzle_problem(problem: PuzzleProblem) -> Tuple[List[str] | None, int]:
