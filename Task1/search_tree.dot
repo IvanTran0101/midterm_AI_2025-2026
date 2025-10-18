@@ -1,0 +1,8 @@
+digraph SearchTree {
+  node [shape=ellipse, fontsize=12];
+  n0 [label="786\n134\n5_2"];
+  n1 [label="786\n1_4\n532"];
+  n2 [label="786\n134\n52_"];
+  n0 -> n1 [label="U"];
+  n0 -> n2 [label="R"];
+}
