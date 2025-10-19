@@ -53,7 +53,8 @@ class PuzzleState:
             def try_swap(i: int, j: int) -> None:
                 a, b = self.tiles[i], self.tiles[j]
                 if a != 0 and b != 0 and (a + b == 9):
-                    succ.append((self._swap(i, j), "A9"))
+                    # Gắn chỉ số i-j để phân biệt các nước A9 tiềm năng trong cùng một trạng thái
+                    succ.append((self._swap(i, j), f"A9:{i}-{j}"))
 
             # Ngang
             for rr in range(3):
@@ -70,7 +71,8 @@ class PuzzleState:
             for (r1, c1), (r2, c2) in [((0, 0), (2, 2)), ((0, 2), (2, 0))]:
                 i, j = r1 * 3 + c1, r2 * 3 + c2
                 if self.tiles[i] != 0 and self.tiles[j] != 0:
-                    succ.append((self._swap(i, j), "Diag"))
+                    # Gắn chỉ số i-j để phân biệt 2 đường chéo khác nhau nếu đều hợp lệ
+                    succ.append((self._swap(i, j), f"Diag:{i}-{j}"))
 
         return succ
 
@@ -80,4 +82,3 @@ class PuzzleState:
     def __str__(self) -> str:
         rows = [self.tiles[i:i+3] for i in range(0, 9, 3)]
         return "\n".join(str(list(r)) for r in rows)
-

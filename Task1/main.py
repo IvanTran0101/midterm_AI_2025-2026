@@ -20,9 +20,9 @@ from .visual_search_tree import (
 
 def run_demo() -> None:
     initial = PuzzleState.from_list([
-        7, 8, 6,
-        1, 3, 4,
-        5, 0, 2,
+        8, 7, 6,
+        5, 4, 3,
+        1, 0, 2,
     ])
 
     problem = PuzzleProblem(initial)
@@ -67,9 +67,9 @@ if __name__ == "__main__":
 
     if args.tree > 0:
         initial = PuzzleState.from_list([
-            7, 8, 6,
-            1, 3, 4,
-            5, 0, 2,
+            8, 7, 6,
+            5, 4, 3,
+            1, 0, 2,
         ])
         # Generate DOT for A*-order search tree (replaces previous BFS DOT)
         dot_str = generate_search_tree_dot_astar(initial, args.tree, include_special=args.include_special)
