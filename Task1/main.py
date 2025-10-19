@@ -12,7 +12,10 @@ if __name__ == "__main__" and (__package__ is None or __package__ == ""):
 from .puzzle_state import PuzzleState
 from .problem import PuzzleProblem
 from .strategies import solve_puzzle_problem
-from .tree_visualize import write_search_tree_dot
+from .visual_search_tree import (
+    generate_search_tree_dot_astar,
+    render_search_tree_png,
+)
 
 
 def run_demo() -> None:
@@ -68,34 +71,22 @@ if __name__ == "__main__":
             1, 3, 4,
             5, 0, 2,
         ])
-        out = write_search_tree_dot(initial, args.tree, include_special=args.include_special)
+        # Generate DOT for A*-order search tree (replaces previous BFS DOT)
+        dot_str = generate_search_tree_dot_astar(initial, args.tree, include_special=args.include_special)
+        out = "search_tree.dot"
+        with open(out, "w", encoding="utf-8") as f:
+            f.write(dot_str)
         print(f"Đã ghi DOT cây tìm kiếm vào: {out}")
         print("Dùng Graphviz để render, ví dụ:")
         print("dot -Tpng search_tree.dot -o search_tree.png")
 
         if args.png:
-            def _stem(p: str) -> str:
-                return p[:-4] if p.lower().endswith(".png") else p
-
             png_out = args.png_out
             try:
-                # Prefer python-graphviz if available
-                from graphviz import Source  # type: ignore
-
-                stem = _stem(png_out)
-                Source.from_file(out).render(stem, format="png", cleanup=True)
+                render_search_tree_png(initial, n=args.tree, out_png=png_out, include_special=args.include_special)
                 print(f"Đã render PNG: {png_out}")
             except Exception as e:
-                # Fallback to dot CLI
-                try:
-                    import shutil, subprocess
-                    if shutil.which("dot") is None:
-                        raise RuntimeError("Không tìm thấy 'dot' trong PATH. Hãy cài Graphviz CLI.")
-                        
-                    subprocess.run(["dot", "-Tpng", out, "-o", png_out], check=True)
-                    print(f"Đã render PNG (dot CLI): {png_out}")
-                except Exception as e2:
-                    print("Không thể render PNG tự động:", e2)
-                    print("Bạn có thể thử thủ công: dot -Tpng", out, "-o", png_out)
+                print("Không thể render PNG tự động:", e)
+                print("Bạn có thể thử thủ công: dot -Tpng", out, "-o", png_out)
     else:
         run_demo()
